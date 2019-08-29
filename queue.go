@@ -6,39 +6,44 @@ type queue struct {
 	tail  *node
 }
 
-func (queue *queue) Push(data interface{}) {
+func (q *queue) Push(task Task) {
 	node := &node{
-		data: data,
+		task: task,
 	}
-	tail := queue.tail
+	tail := q.tail
 	if tail == nil {
-		queue.tail = node
+		q.tail = node
 	} else {
 		tail.next = node
-		queue.tail = node
+		q.tail = node
 	}
-	if queue.head == nil {
-		queue.head = queue.tail
+	if q.head == nil {
+		q.head = q.tail
 	}
-	queue.Count++
+	q.Count++
 }
 
-func (queue *queue) Pop() interface{} {
-	head := queue.head
+func (q *queue) Pop() Task {
+	head := q.head
 	if head == nil {
 		return nil
 	}
 	if head.next == nil {
-		queue.head = nil
-		queue.tail = nil
+		q.head = nil
+		q.tail = nil
 	} else {
-		queue.head = head.next
+		q.head = head.next
 	}
-	queue.Count--
-	return head.data
+	q.Count--
+	return head.task
+}
+
+func (q *queue) Remove(task Task) {
+	// fake remove
+	q.Pop()
 }
 
 type node struct {
-	data interface{}
+	task Task
 	next *node
 }
